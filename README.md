@@ -36,6 +36,13 @@ All these and more! Try `skeletor -h` for commands, and `skeletor [command] -h`
 for command-specific help.
 
 
+What version am I running?
+--------------------------
+Skeletor is a living piece of code and is completely versionless. Self-updating
+features are coming soon, but until then, keep an eye on it to check for new
+commits!
+
+
 Can I fork this and then do stuff with it?
 ------------------------------------------
 You sure can! Skeletor is licensed under the ISC license, which reads as
