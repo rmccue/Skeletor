@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+import argparse
+from lib import commands
+
+
+def main():
+	parser = argparse.ArgumentParser()
+	sub = parser.add_subparsers(title='commands')
+
+	## General commands
+	init = sub.add_parser('init', help='initialize a new site')
+	init.add_argument('--repo',
+		default='https://github.com/markjaquith/WordPress-Skeleton.git',
+		help="Repository to clone from. Defaults to Mark Jaquith's")
+	init.add_argument('directory', nargs='?', default='site',
+		help='Directory to start a new site in (default: site)')
+	init.set_defaults(func=commands.initialize)
+
+	update = sub.add_parser('update', help='update to latest skeleton')
+	update.add_argument('--version', help='hardcode a version',
+		default='latest')
+	update.set_defaults(func=commands.update)
+
+	## Plugins!
+	plugins = sub.add_parser('plugins')
+	plugins_sub = plugins.add_subparsers()
+
+	# Add a new plugin
+	plugins_add = plugins_sub.add_parser('add', help='add a plugin')
+	plugins_add.add_argument('--mustuse', '-m', help="Add into mu-plugins instead")
+	plugins_add.add_argument('--version', default='')
+	plugins_add.add_argument('repo', help="Repository URL (either a Git URL, or a plugin slug)")
+	plugins_add.add_argument('directory', nargs='?', default='',
+		help='Subdirectory of plugins to place plugin in (default: human '
+			'version of the URL, like git clone)')
+	plugins_add.set_defaults(func=commands.plugins_add)
+
+	## Themes!
+	themes = sub.add_parser('themes')
+	themes_sub = themes.add_subparsers()
+
+	# Add a new theme
+	themes_add = themes_sub.add_parser('add', help='add a plugin')
+	themes_add.add_argument('--version', required=True)
+	themes_add.add_argument('repo', help="Repository URL (either a Git URL, or a plugin slug)")
+	themes_add.add_argument('directory', nargs='?', default='',
+		help='Subdirectory of plugins to place theme in (default: human '
+			'version of the URL, like git clone)')
+	themes_add.set_defaults(func=commands.plugins_add)
+
+	# Actually parse and run commands
+	parsed = parser.parse_args()
+	parsed.func(parsed)
+
+if __name__ == '__main__':
+	main()
